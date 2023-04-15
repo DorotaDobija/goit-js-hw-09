@@ -20,7 +20,7 @@ const options = {
       return;
     }
     startBtn.removeAttribute('disabled');
-    return timeMs();
+    timeMs();
   },
 };
 
@@ -47,10 +47,5 @@ function convertMs(ms) {
 
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
-  return (
-    (daysEl.textContent = `${days}`),
-    (hoursEl.textContent = `${hours}`),
-    (minutesEl.textContent = `${minutes}`),
-    (secondsEl.textContent = `${seconds}`)
-  );
+  return { days, hours, minutes, seconds };
 }
