@@ -14,7 +14,12 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    if (selectedDates[0] < new Date()) {
+      window.alert('Please choose a date in the future');
+      startBtn.setAttribute('disabled', '');
+      return;
+    }
+    startBtn.removeAttribute('disabled');
     return timeMs();
   },
 };
@@ -23,8 +28,8 @@ const fp = flatpickr(inputEl, options);
 
 function timeMs() {
   const chosenDate = new Date(fp.selectedDates[0]);
-  const eventDate = new Date('2023-04-21 12:00:00');
-  const time = eventDate.getTime() - chosenDate.getTime();
+  const today = new Date();
+  const time = chosenDate.getTime() - today.getTime();
   convertMs(time);
 }
 
