@@ -8,12 +8,15 @@ const hoursEl = document.querySelector('[data-hours]');
 const minutesEl = document.querySelector('[data-minutes]');
 const secondsEl = document.querySelector('[data-seconds]');
 
+let chosenDate = 0;
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
+    chosenDate = selectedDates[0];
     if (selectedDates[0] < new Date()) {
       window.alert('Please choose a date in the future');
       startBtn.setAttribute('disabled', '');
@@ -26,11 +29,13 @@ const options = {
 
 const fp = flatpickr(inputEl, options);
 
+let time = 0;
+
 function timeMs() {
-  const chosenDate = new Date(fp.selectedDates[0]);
   const today = new Date();
-  const time = chosenDate.getTime() - today.getTime();
-  convertMs(time);
+  time = chosenDate.getTime() - today.getTime();
+  const convertTime = convertMs(time);
+  timeAdded(convertTime);
 }
 
 function convertMs(ms) {
@@ -48,4 +53,39 @@ function convertMs(ms) {
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
 
   return { days, hours, minutes, seconds };
+}
+
+function timeAdded({ days, hours, minutes, seconds }) {
+  const finalFormat = addLeadingZero({ days, hours, minutes, seconds });
+  daysEl.textContent = `${finalFormat[0]}`;
+  hoursEl.textContent = `${finalFormat[1]}`;
+  minutesEl.textContent = `${finalFormat[2]}`;
+  secondsEl.textContent = `${finalFormat[3]}`;
+}
+
+let timerId = 0;
+
+function counterFunc() {
+  time = time - 1000;
+  timeAdded(convertMs(time));
+  console.log(time);
+  if (time < 1000) {
+    clearFunc(timerId);
+  }
+}
+
+function clearFunc(timerId) {
+  clearInterval(timerId);
+}
+
+startBtn.addEventListener('click', () => {
+  timerId = setInterval(counterFunc, 1000);
+});
+
+function addLeadingZero(value) {
+  const valueArray = [];
+  for (const key in value) {
+    valueArray.push(value[key].toString().padStart(2, '0'));
+  }
+  return valueArray;
 }
