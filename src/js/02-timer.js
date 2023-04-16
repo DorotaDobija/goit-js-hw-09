@@ -68,7 +68,6 @@ let timerId = 0;
 function counterFunc() {
   time = time - 1000;
   timeAdded(convertMs(time));
-  console.log(time);
   if (time < 1000) {
     clearFunc(timerId);
   }
