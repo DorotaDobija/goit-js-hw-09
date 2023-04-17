@@ -11,15 +11,17 @@ function promisFunc() {
   let delay = +firstDelay;
 
   for (let i = 1; i <= amount; i++) {
-    let position = i;
-    createPromise(position, delay)
-      .then(({ position, delay }) =>
-        console.log(`✅ Fulfilled promise ${position} in ${delay}ms`)
-      )
-      .catch(({ position, delay }) =>
-        console.log(`❌ Rejected promise ${position} in ${delay}ms`)
-      );
-    delay = delay += +delayStep;
+    setTimeout(() => {
+      let position = i;
+      createPromise(position, delay)
+        .then(({ position, delay }) =>
+          console.log(`✅ Fulfilled promise ${position} in ${delay}ms`)
+        )
+        .catch(({ position, delay }) =>
+          console.log(`❌ Rejected promise ${position} in ${delay}ms`)
+        );
+      delay = delay += +delayStep;
+    }, delayStep);
   }
 }
 
@@ -36,5 +38,5 @@ function createPromise(position, delay) {
 
 formEl.addEventListener('submit', e => {
   e.preventDefault();
-  promisFunc();
+  setTimeout(() => promisFunc(), delayEl.value);
 });
